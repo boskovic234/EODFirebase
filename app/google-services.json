@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "181969395147",
+    "firebase_url": "https://eodbfi-689cb.firebaseio.com",
+    "project_id": "eodbfi-689cb",
+    "storage_bucket": "eodbfi-689cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181969395147:android:ce7a822d25a6cae2",
+        "android_client_info": {
+          "package_name": "com.example.jktmuhip.eodfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181969395147-41bnov0l752odurh4q8rdq49qe8drk1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHWC1dGHIxHJJCSdCeaTLMfVt6cvXaaDw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
