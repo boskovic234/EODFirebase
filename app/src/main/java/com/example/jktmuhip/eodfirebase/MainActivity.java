@@ -23,6 +23,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,8 +48,14 @@ public class MainActivity extends AppCompatActivity {
     String proses;
     String Query;
     CountDownTimer timer;
-
-
+    SimpleDateFormat formatjam;
+    String jam1;
+    String jam2;
+    String jam3;
+    Calendar c;
+    Date time1 = new Date();
+    Date time2 = new Date();
+    Date time3 = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +63,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         koneksi = new ConnectionClass();
+
+
         dataBase = FirebaseDatabase.getInstance();
         buttonSubmit = (Button) findViewById(R.id.BTNSubmit);
         buttonStop = (Button) findViewById(R.id.BTNStop);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
+        formatjam = new SimpleDateFormat("HH:mm");
+
+        //SET JAM
+        c = Calendar.getInstance();
+        jam2 = "23:50"; //END EOD MONITORING TIME
+        jam3 = "19:00"; //START EOD MONITORING TIME
 
         jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
 
@@ -67,19 +85,47 @@ public class MainActivity extends AppCompatActivity {
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
 
-                    timer = new CountDownTimer(86400000, 1800000) {
+                    //timer = new CountDownTimer(86400000, 1800000) {
+                    timer = new CountDownTimer(120000, 20000) {
                         public void onFinish() {
                             // When timer is finished
                             // Execute your code here
-                            Log.d("Disini", "Sudah Selesai Woi");
+                            Log.d("Disini", "EOD Selesai Woi");
 
                         }
 
                         public void onTick(long millisUntilFinished) {
                             // millisUntilFinished    The amount of time until finished.
-                            Log.d("Disini", "Disini woi");
-                            DoLogin doLogin = new DoLogin();
-                            doLogin.execute("");
+                            jam1 = formatjam.format(c.getTime());
+                            //jam1 = "18:58"; debug
+
+
+                            try {
+                                time1 = formatjam.parse(jam1);
+                                time2 = formatjam.parse(jam2);
+                                time3 = formatjam.parse(jam3);
+
+                                if(time1.compareTo(time2)<0)
+                                {
+                                    if(time1.compareTo(time3)>0)
+                                    {
+                                    Log.d("Disini","EOD lagi jalan,"+time1+" "+time2+" "+time3);
+                                    DoLogin doLogin = new DoLogin();
+                                    doLogin.execute("");
+                                    }
+                                    else
+                                    {
+                                        Log.d("Disini","EOD lom mulai1,"+time1+" "+time2+" "+time3);
+                                    }
+                                }
+                                else
+                                {
+                                    Log.d("Disini","EOD Sudah selesai,"+time1+" "+time2+" "+time3);
+                                }
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }.start();
 
@@ -139,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             Connection kon = koneksi.CONN();
-            Log.d("Disini", "Query Jalan");
+
             if (kon == null) {
                 z = "Error koneksi SQL";
             } else {
@@ -168,8 +214,8 @@ public class MainActivity extends AppCompatActivity {
                         tgl = sb.toString();
                         proses = sb2.toString();
 
-                        Log.d("Disini", tgl);
-                        Log.d("Disini", proses);
+                        //Log.d("Disini", tgl);
+                        //Log.d("Disini", proses);
 
                     }
 
@@ -204,11 +250,6 @@ public class MainActivity extends AppCompatActivity {
             databaseRef = dataBase.getReference(reference2);
             databaseRef.setValue(value2);
         }
-    }
-
-    public void isEOD()
-    {
-
     }
 
 }
