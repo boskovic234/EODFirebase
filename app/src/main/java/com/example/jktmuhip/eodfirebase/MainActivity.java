@@ -4,6 +4,8 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     String tgl;
     String proses;
     String Query;
+    CountDownTimer timer;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +58,36 @@ public class MainActivity extends AppCompatActivity {
         buttonStop = (Button) findViewById(R.id.BTNStop);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
 
-        jobScheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
+        jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
 
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Log.d("Disini", "Disini Woi");
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+
+                    timer = new CountDownTimer(86400000, 1800000) {
+                        public void onFinish() {
+                            // When timer is finished
+                            // Execute your code here
+                            Log.d("Disini", "Sudah Selesai Woi");
+
+                        }
+
+                        public void onTick(long millisUntilFinished) {
+                            // millisUntilFinished    The amount of time until finished.
+                            Log.d("Disini", "Disini woi");
+                            DoLogin doLogin = new DoLogin();
+                            doLogin.execute("");
+                        }
+                    }.start();
+
+
                 //DoLogin doLogin = new DoLogin();
                 //doLogin.execute("");
 
+                /* BACKGROUND PROCESS START
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
 
@@ -78,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,
                             "RESULT_FAILURE: " + jobId,
                             Toast.LENGTH_SHORT).show();
-                }
+                }BACKGROUND PROCESS END*/
             }
         });
 
@@ -86,10 +113,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 chronometer.stop();
+                timer.cancel();
+                Log.d("Disini", "Timer di stop");
 
+                /*BACKGROUND PROCESS START
                 List<JobInfo> allPendingJobs = jobScheduler.getAllPendingJobs();
                 String s = "";
-                for(JobInfo j : allPendingJobs){
+                for (JobInfo j : allPendingJobs) {
                     int jId = j.getId();
                     jobScheduler.cancel(jId);
                     s += "jobScheduler.cancel(" + jId + " )";
@@ -97,17 +127,19 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,
                         s,
                         Toast.LENGTH_SHORT).show();
-        }});
+                BACKGROUND PROCESS STOP*/
+            }
+        });
     }
 
-   public class DoLogin extends AsyncTask<String, String, String> {
+    public class DoLogin extends AsyncTask<String, String, String> {
         String z = "";
         Boolean isSuccess = false;
 
         @Override
         protected String doInBackground(String... params) {
             Connection kon = koneksi.CONN();
-
+            Log.d("Disini", "Query Jalan");
             if (kon == null) {
                 z = "Error koneksi SQL";
             } else {
@@ -149,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
             return z;
         }
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String result)
+        {
             firebase();
         }
 
@@ -171,6 +204,11 @@ public class MainActivity extends AppCompatActivity {
             databaseRef = dataBase.getReference(reference2);
             databaseRef.setValue(value2);
         }
+    }
+
+    public void isEOD()
+    {
+
     }
 
 }
