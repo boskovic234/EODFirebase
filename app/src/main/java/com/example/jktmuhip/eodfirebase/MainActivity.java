@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         formatjam = new SimpleDateFormat("HH:mm");
 
+        buttonStop.setEnabled(false);
+
         //SET JAM
         c = Calendar.getInstance();
         jam2 = "23:50"; //END EOD MONITORING TIME
@@ -84,9 +86,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
+                buttonStop.setEnabled(true);
+                buttonSubmit.setEnabled(false);
 
-                    //timer = new CountDownTimer(86400000, 1800000) {
-                    timer = new CountDownTimer(120000, 20000) {
+                    timer = new CountDownTimer(86400000, 1800000) {
+                    //timer = new CountDownTimer(120000, 20000) {
                         public void onFinish() {
                             // When timer is finished
                             // Execute your code here
@@ -160,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 chronometer.stop();
                 timer.cancel();
+                buttonSubmit.setEnabled(true);
+                buttonStop.setEnabled(false);
                 Log.d("Disini", "Timer di stop");
 
                 /*BACKGROUND PROCESS START
