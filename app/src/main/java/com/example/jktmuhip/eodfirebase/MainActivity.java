@@ -3,6 +3,7 @@ package com.example.jktmuhip.eodfirebase;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Chronometer chronometer;
     Button buttonSubmit;
     Button buttonStop;
+    TextView textViewSS;
 
     String reference1;
     String value1;
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     Date time2 = new Date();
     Date time3 = new Date();
 
+    ImageView imageViewBFI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         buttonSubmit = (Button) findViewById(R.id.BTNSubmit);
         buttonStop = (Button) findViewById(R.id.BTNStop);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
+        imageViewBFI = (ImageView) findViewById(R.id.IVBFI);
+        //imageViewBFI.setImageResource(R.drawable.bfi);
+        textViewSS = (TextView) findViewById(R.id.TVSS);
         formatjam = new SimpleDateFormat("HH:mm");
 
         buttonStop.setEnabled(false);
@@ -88,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 chronometer.start();
                 buttonStop.setEnabled(true);
                 buttonSubmit.setEnabled(false);
+                textViewSS.setText("Service Status Running..");
 
                     timer = new CountDownTimer(86400000, 1800000) {
                     //timer = new CountDownTimer(120000, 20000) {
@@ -95,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
                             // When timer is finished
                             // Execute your code here
                             Log.d("Disini", "EOD Selesai Woi");
+                            textViewSS.setText("Service Status Not Running");
+                            buttonStop.setEnabled(false);
+                            buttonSubmit.setEnabled(true);
 
                         }
 
@@ -167,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 buttonSubmit.setEnabled(true);
                 buttonStop.setEnabled(false);
                 Log.d("Disini", "Timer di stop");
+                textViewSS.setText("Service Status Not Running");
 
                 /*BACKGROUND PROCESS START
                 List<JobInfo> allPendingJobs = jobScheduler.getAllPendingJobs();

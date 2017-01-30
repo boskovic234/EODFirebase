@@ -46,6 +46,13 @@
             android:layout_gravity="center_horizontal"
             />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Service Status Not Running"
+            android:id="@+id/TVSS"
+            android:layout_gravity="center_horizontal"/>
+
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="match_parent"
