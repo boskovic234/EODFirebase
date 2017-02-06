@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 buttonSubmit.setEnabled(false);
                 textViewSS.setText("Service Status Running..");
 
-                    timer = new CountDownTimer(86400000, 1800000) {
+                    timer = new CountDownTimer(518400000, 450000) {
                     //timer = new CountDownTimer(120000, 20000) {
                         public void onFinish() {
                             // When timer is finished
@@ -112,11 +112,14 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         public void onTick(long millisUntilFinished) {
+                            DoLogin doLogin = new DoLogin();
+                            doLogin.execute("");
                             // millisUntilFinished    The amount of time until finished.
                             jam1 = formatjam.format(c.getTime());
                             //jam1 = "18:58"; debug
 
-
+                            //UNTUK CEK JAM
+                            /*
                             try {
                                 time1 = formatjam.parse(jam1);
                                 time2 = formatjam.parse(jam2);
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
+                            */
                         }
                     }.start();
 
